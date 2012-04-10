@@ -1,0 +1,31 @@
+#!/usr/bin/env perl 
+use strict; use warnings;
+use App::Rad qw/+App::doing/;
+App::Rad->run;
+
+sub add 
+:Help(add a new entry to your 'Currently Doing' file){
+	my $c = shift;
+	my $message;
+	if($c->options->{m}){ $message = shift $c->argv; }
+	return $c->add($message);
+}
+
+sub default {
+	open my $fh, '<', '.doing.log' or return;
+	my $res = <$fh>;
+	while(<$fh>){
+		last unless /^\t/;
+		$res.=$_;
+	}
+	return $res;
+}
+
+# ABSTRACT: Keep track of what you were doing in a folder!
+# PODNAME: doing
+
+=head1 NAME
+
+doing  - keep track of what you were doing in a folder!
+
+
